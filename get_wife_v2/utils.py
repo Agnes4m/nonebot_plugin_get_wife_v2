@@ -2,51 +2,13 @@ import io
 import httpx
 import hashlib
 import asyncio
+
 from nonebot_plugin_imageutils import BuildImage,Text2Image
+
 try:
     import ujson as json
 except ModuleNotFoundError:
     import json
-
-
-data_dir = "./data/setuCD"
-
-
-def read_json() -> dict:
-    try:
-        with open(data_dir + "usercd.json", "r") as f_in:
-            data = json.load(f_in)
-            f_in.close()
-            return data
-    except FileNotFoundError:
-        try:
-            import os
-
-            os.makedirs(data_dir)
-        except FileExistsError:
-            pass
-        with open(data_dir + "usercd.json", mode="w") as f_out:
-            json.dump({}, f_out)
-
-        return {}
-
-
-def write_json(qid: str, time: int, mid: int, data: dict):
-    data[qid] = [time, mid]
-    with open(data_dir + "usercd.json", "w") as f_out:
-        json.dump(data, f_out)
-        f_out.close()
-
-
-def remove_json(qid: str):
-    with open(data_dir + "usercd.json", "r") as f_in:
-        data = json.load(f_in)
-        f_in.close()
-    data.pop(qid)
-    with open(data_dir + "usercd.json", "w") as f_out:
-        json.dump(data, f_out)
-        f_out.close()
-
 
 async def download_avatar(user_id: int) -> bytes:
     url = f"http://q1.qlogo.cn/g?b=qq&nk={user_id}&s=640"
